@@ -1,0 +1,41 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://user-eureka:euakjdaskrejdnbfjka@localhost:8761/eureka
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+mq:
+  queues:
+    support-equipment: msroomreserve
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  port: 0
+
+logging:
+  file:
+    name: msroomreserve/logs/log-file.log
+
+
+
+spring:
+  application:
+    name: msroomreserve
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/reserve-room
+    #192.168.44.184
+    username: postgres
+    password: root
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
