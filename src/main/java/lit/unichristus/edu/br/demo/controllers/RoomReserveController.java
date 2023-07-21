@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -40,26 +41,18 @@ public class RoomReserveController {
         }
     }
 
-//    @PostMapping(value = "/semesterDate")
-//    public ResponseEntity<Object> reserveSemestralDate(@RequestBody @Valid RoomReserveDto dto){
-//        try{
-//            if (roomReserveService.existReserveAlready(dto.getDate())) {
-//                return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Room already booked on the given date!");
-//            }
-//            RoomReserveModel model = dto.toModel();
-//            List<RoomReserveModel>  listDates = null;
-//            listDates.add(model);
-//            for (int i = 0; i<5; i++){
-//                Calendar calendarFormat = Calendar.getInstance();
-//                calendarFormat.setTime(model.getDate());
-//                calendarFormat.add(Calendar.DATE, 7);
-//                Date currentDatePlusOne = calendarFormat.getTime();
-//                model.setDate(currentDatePlusOne);
-//                listDates.add(model);
-//            }
-//            return ResponseEntity.status(HttpStatus.CREATED).body(roomReserveService.saveAllReservs(listDates));
-//        }catch (Exception e){
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
-//        }
-//    }
+    @PostMapping(value = "/semesterDate")
+    public ResponseEntity<Object> reserveSemestralDate(@RequestBody @Valid RoomReserveDto dto){
+        try{
+            //if existReserve AND sharedFalse
+            if (roomReserveService.existReserveAlready(dto.getDate())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Room already booked on the given date!");
+            }
+            RoomReserveModel model = dto.toModel();
+            List<RoomReserveModel>  listDates = roomReserveService.UpdateSemestralDates(model);
+            return ResponseEntity.status(HttpStatus.CREATED).body(roomReserveService.saveAllReservs(listDates));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
+    }
 }

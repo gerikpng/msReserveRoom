@@ -6,6 +6,8 @@ import lit.unichristus.edu.br.demo.repository.RoomReserveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -48,5 +50,38 @@ public class RoomReserveService {
 
     public Object saveAllReservs(List<RoomReserveModel> model) {
         return repository.saveAll(model);
+    }
+
+    public List<RoomReserveModel> UpdateSemestralDates(RoomReserveModel model){
+        List<RoomReserveModel>  listDates = new ArrayList<RoomReserveModel>();
+        listDates.add(model);
+        for (int i = 1; i<20; i++) {
+            Calendar calendarFormat = Calendar.getInstance();
+            calendarFormat.setTime(model.getDate());
+            int days = 7*i;
+            calendarFormat.add(Calendar.DATE, days);
+//                System.out.println(days+"------/------------------------");
+            RoomReserveModel reserveModel = new RoomReserveModel(model.getCreatedDate(), false,model.getRoom(),model.getDate(),model.getInitialTime(),model.getFinalTime(),model.getLocal(),model.isShared(),model.getObservation(),model.getResponsible(),model.isPresence());
+            Date currentDatePlusOne = calendarFormat.getTime();
+            reserveModel.setDate(currentDatePlusOne);
+            //CHANGE INITIAL_TIME
+            calendarFormat.setTime(model.getInitialTime());
+            days = 7*i;
+            calendarFormat.add(Calendar.DATE, days);
+            currentDatePlusOne = calendarFormat.getTime();
+            reserveModel.setInitialTime(currentDatePlusOne);
+
+            //CHANGE FINAL_TIME
+            calendarFormat.setTime(model.getFinalTime());
+            days = 7*i;
+            calendarFormat.add(Calendar.DATE, days);
+            currentDatePlusOne = calendarFormat.getTime();
+            reserveModel.setFinalTime(currentDatePlusOne);
+
+            //ADDING OBJECT WITH UPDATED DATE
+            listDates.add(reserveModel);
+        }
+
+        return listDates;
     }
 }

@@ -49,7 +49,7 @@ public class RoomReserveModel implements Serializable {
 
     private boolean presence;
 
-    public RoomReserveModel(boolean isDeleted, UUID room, Date date, Date initialTime, Date finalTime, LocalEnum local, boolean shared, String observation, UUID responsible, boolean presence) {
+    public RoomReserveModel(Date createdDate, boolean isDeleted, UUID room, Date date, Date initialTime, Date finalTime, LocalEnum local, boolean shared, String observation, UUID responsible, boolean presence) {
         this.isDeleted = isDeleted;
         this.room = room;
         this.date = date;
