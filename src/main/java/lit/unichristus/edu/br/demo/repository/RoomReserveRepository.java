@@ -17,5 +17,7 @@ public interface RoomReserveRepository extends JpaRepository<RoomReserveModel, U
 
     Optional<RoomReserveModel> findByIdAndIsDeletedFalse(UUID id);
 
+    Optional<List<RoomReserveModel>> findByIsDeletedFalse();
+
     List<RoomReserveModel> findByRoomAndIsDeletedFalse(UUID room);
 }

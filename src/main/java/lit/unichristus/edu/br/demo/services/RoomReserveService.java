@@ -22,6 +22,10 @@ public class RoomReserveService {
         return repository.findAll();
     }
 
+    public Optional<List<RoomReserveModel>> findAllActive(){
+        return repository.findByIsDeletedFalse();
+    }
+
 
     //my date param is between initial and final
 

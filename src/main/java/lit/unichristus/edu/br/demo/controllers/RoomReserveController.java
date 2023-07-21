@@ -6,6 +6,7 @@ import lit.unichristus.edu.br.demo.models.RoomReserveModel;
 import lit.unichristus.edu.br.demo.services.RoomReserveService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +27,34 @@ public class RoomReserveController {
     }
 
     @GetMapping("/active-reserves")
-    public ResponseEntity<List<RoomReserveModel>> getActiveReserves(){
-        return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.findAll());
+    public ResponseEntity<Object> getActiveReserves(){
+        return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.findAllActive());
     }
 
     @GetMapping("/active-reserves/room/{room}")
-    public ResponseEntity<List<RoomReserveModel>> getActiveReservesByRoom(@PathVariable(value="room") UUID room){
-        return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.findByRoom(room));
+    public ResponseEntity<Object> getActiveReservesByRoom(@PathVariable(value="room") UUID room){
+        try {
+            List<RoomReserveModel> reserveModel = roomReserveService.findByRoom(room);
+            if(reserveModel.stream().count() < 1){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERROR: NO ONE RESULT FOUND");
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.findByRoom(room));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
     }
 
     @GetMapping("/active-reserves/id/{id}")
     public ResponseEntity<Object> getActiveReserveById(@PathVariable(value="id") UUID id){
-        return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.findById(id));
+        try {
+            Optional<RoomReserveModel> roomModel = roomReserveService.findById(id);
+            if (roomModel.get().getId() == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERROR: RESERVE COULD'NT BE FOUND");
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.findById(id));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
     }
 
 
