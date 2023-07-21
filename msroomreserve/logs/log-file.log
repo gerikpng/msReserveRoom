@@ -547,3 +547,19 @@
 2023-07-21T09:44:05.251-03:00  INFO 616040 --- [http-nio-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
 2023-07-21T09:48:21.687-03:00  INFO 616040 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
 2023-07-21T09:53:21.691-03:00  INFO 616040 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2023-07-21T09:58:21.692-03:00  INFO 616040 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2023-07-21T10:03:21.692-03:00  INFO 616040 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2023-07-21T10:08:21.693-03:00  INFO 616040 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2023-07-21T10:13:21.694-03:00  INFO 616040 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2023-07-21T10:18:21.695-03:00  INFO 616040 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2023-07-21T10:22:24.989-03:00  INFO 616040 --- [SpringApplicationShutdownHook] o.s.c.n.e.s.EurekaServiceRegistry        : Unregistering application MSROOMRESERVE with eureka with status DOWN
+2023-07-21T10:22:24.990-03:00  INFO 616040 --- [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1689945744990, current=DOWN, previous=UP]
+2023-07-21T10:22:24.991-03:00  INFO 616040 --- [DiscoveryClient-InstanceInfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_MSROOMRESERVE/192.168.43.202:msroomreserve:d1813efc75d83edd9da8989235958eeb: registering service...
+2023-07-21T10:22:25.034-03:00  INFO 616040 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-07-21T10:22:25.038-03:00  INFO 616040 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-07-21T10:22:25.070-03:00  INFO 616040 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-07-21T10:22:25.071-03:00  INFO 616040 --- [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2023-07-21T10:22:25.102-03:00  INFO 616040 --- [DiscoveryClient-InstanceInfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_MSROOMRESERVE/192.168.43.202:msroomreserve:d1813efc75d83edd9da8989235958eeb - registration status: 204
+2023-07-21T10:22:25.104-03:00  INFO 616040 --- [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2023-07-21T10:22:25.208-03:00  INFO 616040 --- [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_MSROOMRESERVE/192.168.43.202:msroomreserve:d1813efc75d83edd9da8989235958eeb - deregister  status: 200
+2023-07-21T10:22:25.215-03:00  INFO 616040 --- [SpringApplicationShutdownHook] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient

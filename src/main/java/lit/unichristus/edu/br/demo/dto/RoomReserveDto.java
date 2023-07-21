@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class RoomReserveDto {
 
+    private UUID id;
     private Date createdDate;
     private boolean isDeleted;
     //    --------------------------
@@ -31,7 +32,7 @@ public class RoomReserveDto {
     private boolean presence;
 
     public RoomReserveModel toModel() {
-        return new RoomReserveModel(createdDate,isDeleted,room,date,initialTime,finalTime,local,shared,observation,responsible,presence);
+        return new RoomReserveModel(id,createdDate,isDeleted,room,date,initialTime,finalTime,local,shared,observation,responsible,presence);
     }
 
     public Date getCreatedDate() {
@@ -123,4 +124,11 @@ public class RoomReserveDto {
     }
 
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 }

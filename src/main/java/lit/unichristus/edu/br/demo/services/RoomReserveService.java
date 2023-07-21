@@ -6,10 +6,7 @@ import lit.unichristus.edu.br.demo.repository.RoomReserveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class RoomReserveService {
@@ -83,5 +80,17 @@ public class RoomReserveService {
         }
 
         return listDates;
+    }
+
+    public Optional<RoomReserveModel> findById(UUID id) {
+        return repository.findByIdAndIsDeletedFalse(id);
+    }
+
+    public List<RoomReserveModel> findByRoom(UUID room) {
+        return repository.findByRoomAndIsDeletedFalse(room);
+    }
+
+    public boolean existReserve(UUID id) {
+        return repository.existsById(id);
     }
 }
