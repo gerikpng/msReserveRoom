@@ -5,6 +5,7 @@ import lit.unichristus.edu.br.demo.dto.RoomReserveDto;
 import lit.unichristus.edu.br.demo.exceptions.EquipmentComunicationException;
 import lit.unichristus.edu.br.demo.exceptions.EquipmentsNotFoundException;
 import lit.unichristus.edu.br.demo.models.RoomReserveModel;
+import lit.unichristus.edu.br.demo.models.SupportEquipmentModel;
 import lit.unichristus.edu.br.demo.services.RoomReserveService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
@@ -30,13 +31,23 @@ public class RoomReserveController {
 
     @GetMapping("/situation")
     public ResponseEntity<Object> getSituationReserve(@RequestParam(value = "idReserve") UUID idReserve){
-        try {
+
+        try{
+            if((roomReserveService.getSituationReserve(idReserve)) == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERROR: NO ONE RESERVE FOUND");
+            }
             return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.getSituationReserve(idReserve));
-        } catch (EquipmentsNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NENHUM EQUIPAMENTO ENCONTRADO ");
-        } catch (EquipmentComunicationException e) {
-            return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
+
+//        try {
+
+//        } catch (EquipmentsNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NENHUM EQUIPAMENTO ENCONTRADO ");
+//        } catch (EquipmentComunicationException e) {
+//            return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+//        }
     }
 
     @GetMapping("/active-reserves")

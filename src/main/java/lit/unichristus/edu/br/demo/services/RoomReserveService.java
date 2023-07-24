@@ -1,15 +1,18 @@
 package lit.unichristus.edu.br.demo.services;
 
 import feign.FeignException;
+import feign.Response;
 import jakarta.transaction.Transactional;
 import lit.unichristus.edu.br.demo.clients.SupportEquipmentsClient;
 import lit.unichristus.edu.br.demo.exceptions.EquipmentComunicationException;
 import lit.unichristus.edu.br.demo.exceptions.EquipmentsNotFoundException;
+import lit.unichristus.edu.br.demo.exceptions.ReserveNotFoundException;
 import lit.unichristus.edu.br.demo.models.RoomReserveModel;
 import lit.unichristus.edu.br.demo.models.SituationReserve;
 import lit.unichristus.edu.br.demo.models.SupportEquipmentModel;
 import lit.unichristus.edu.br.demo.repository.RoomReserveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -110,23 +113,18 @@ public class RoomReserveService {
     }
 
     //---- CLIENT SUPPORT EQUIPMENTS
-    public SituationReserve getSituationReserve(UUID idReserve) throws EquipmentsNotFoundException, EquipmentComunicationException{
-        try{
-            ResponseEntity<List<SupportEquipmentModel>> responseEquipmet = equipmentClient.getAllocatedEquipment(idReserve);
-            Optional<RoomReserveModel> responseReserve = repository.findById(idReserve);
-            return SituationReserve.builder()
-                    .roomReserve(responseReserve.get())
-                    .equipments((List<SupportEquipmentModel>) responseEquipmet.getBody())
-                    .build();
-        }catch(FeignException.FeignClientException e){
-            int status = e.status();
+    public Object getSituationReserve(UUID idReserve){
+        ResponseEntity<List<SupportEquipmentModel>> responseEquipmet = equipmentClient.getAllocatedEquipment(idReserve);
+        Optional<RoomReserveModel> responseReserve = repository.findById(idReserve);
 
-            if(HttpStatus.NOT_FOUND.value() == status){
-                throw new EquipmentsNotFoundException();
-            }
-            throw new EquipmentComunicationException(e.getMessage(),status);
-
+        if(responseReserve.isEmpty()){
+            return null;
         }
+
+        return SituationReserve.builder()
+                .roomReserve(responseReserve.get())
+                .equipments(responseEquipmet.getBody())
+                .build();
 
 
 
