@@ -26,6 +26,11 @@ public class RoomReserveController {
         return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.findAll());
     }
 
+    @GetMapping("/situation")
+    public ResponseEntity<Object> getSituationReserve(@RequestParam(value = "idReserve") UUID idReserve){
+        return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.getSituationReserve(idReserve));
+    }
+
     @GetMapping("/active-reserves")
     public ResponseEntity<Object> getActiveReserves(){
         return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.findAllActive());

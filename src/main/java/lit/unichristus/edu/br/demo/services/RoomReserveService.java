@@ -1,9 +1,15 @@
 package lit.unichristus.edu.br.demo.services;
 
+import feign.FeignException;
 import jakarta.transaction.Transactional;
+import lit.unichristus.edu.br.demo.clients.SupportEquipmentsClient;
 import lit.unichristus.edu.br.demo.models.RoomReserveModel;
+import lit.unichristus.edu.br.demo.models.SituationReserve;
+import lit.unichristus.edu.br.demo.models.SupportEquipmentModel;
 import lit.unichristus.edu.br.demo.repository.RoomReserveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -11,10 +17,13 @@ import java.util.*;
 @Service
 public class RoomReserveService {
 
+    final SupportEquipmentsClient equipmentClient;
+
     @Autowired
     final RoomReserveRepository repository;
 
-    public RoomReserveService(RoomReserveRepository repository) {
+    public RoomReserveService(SupportEquipmentsClient equipmentClient, RoomReserveRepository repository) {
+        this.equipmentClient = equipmentClient;
         this.repository = repository;
     }
 
@@ -96,5 +105,19 @@ public class RoomReserveService {
 
     public boolean existReserve(UUID id) {
         return repository.existsById(id);
+    }
+
+    //---- CLIENT SUPPORT EQUIPMENTS
+    public SituationReserve getSituationReserve(UUID idReserve){
+            ResponseEntity<List<SupportEquipmentModel>> responseEquipmet = equipmentClient.getAllocatedEquipment(idReserve);
+            Optional<RoomReserveModel> responseReserve = repository.findById(idReserve);
+            return SituationReserve.builder()
+                    .roomReserve(responseReserve.get())
+                    .equipments((List<SupportEquipmentModel>) responseEquipmet.getBody())
+                    .build();
+
+
+
+
     }
 }
