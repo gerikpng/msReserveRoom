@@ -2,6 +2,8 @@ package lit.unichristus.edu.br.demo.controllers;
 
 import jakarta.validation.Valid;
 import lit.unichristus.edu.br.demo.dto.RoomReserveDto;
+import lit.unichristus.edu.br.demo.exceptions.EquipmentComunicationException;
+import lit.unichristus.edu.br.demo.exceptions.EquipmentsNotFoundException;
 import lit.unichristus.edu.br.demo.models.RoomReserveModel;
 import lit.unichristus.edu.br.demo.services.RoomReserveService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,13 @@ public class RoomReserveController {
 
     @GetMapping("/situation")
     public ResponseEntity<Object> getSituationReserve(@RequestParam(value = "idReserve") UUID idReserve){
-        return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.getSituationReserve(idReserve));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.getSituationReserve(idReserve));
+        } catch (EquipmentsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NENHUM EQUIPAMENTO ENCONTRADO ");
+        } catch (EquipmentComunicationException e) {
+            return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+        }
     }
 
     @GetMapping("/active-reserves")

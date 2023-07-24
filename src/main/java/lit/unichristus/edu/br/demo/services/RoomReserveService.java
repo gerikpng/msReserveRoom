@@ -3,6 +3,8 @@ package lit.unichristus.edu.br.demo.services;
 import feign.FeignException;
 import jakarta.transaction.Transactional;
 import lit.unichristus.edu.br.demo.clients.SupportEquipmentsClient;
+import lit.unichristus.edu.br.demo.exceptions.EquipmentComunicationException;
+import lit.unichristus.edu.br.demo.exceptions.EquipmentsNotFoundException;
 import lit.unichristus.edu.br.demo.models.RoomReserveModel;
 import lit.unichristus.edu.br.demo.models.SituationReserve;
 import lit.unichristus.edu.br.demo.models.SupportEquipmentModel;
@@ -108,13 +110,23 @@ public class RoomReserveService {
     }
 
     //---- CLIENT SUPPORT EQUIPMENTS
-    public SituationReserve getSituationReserve(UUID idReserve){
+    public SituationReserve getSituationReserve(UUID idReserve) throws EquipmentsNotFoundException, EquipmentComunicationException{
+        try{
             ResponseEntity<List<SupportEquipmentModel>> responseEquipmet = equipmentClient.getAllocatedEquipment(idReserve);
             Optional<RoomReserveModel> responseReserve = repository.findById(idReserve);
             return SituationReserve.builder()
                     .roomReserve(responseReserve.get())
                     .equipments((List<SupportEquipmentModel>) responseEquipmet.getBody())
                     .build();
+        }catch(FeignException.FeignClientException e){
+            int status = e.status();
+
+            if(HttpStatus.NOT_FOUND.value() == status){
+                throw new EquipmentsNotFoundException();
+            }
+            throw new EquipmentComunicationException(e.getMessage(),status);
+
+        }
 
 
 
