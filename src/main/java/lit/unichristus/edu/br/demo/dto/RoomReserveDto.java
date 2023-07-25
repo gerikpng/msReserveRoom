@@ -4,6 +4,8 @@ import lit.unichristus.edu.br.demo.enums.LocalEnum;
 import lit.unichristus.edu.br.demo.models.RoomReserveModel;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class RoomReserveDto {
@@ -30,6 +32,7 @@ public class RoomReserveDto {
     private UUID responsible;
 
     private boolean presence;
+    private Optional<List<EquipmentDto>> equipment;
 
     public RoomReserveModel toModel() {
         return new RoomReserveModel(id,createdDate,isDeleted,room,date,initialTime,finalTime,local,shared,observation,responsible,presence);
@@ -130,5 +133,13 @@ public class RoomReserveDto {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Optional<List<EquipmentDto>> getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(Optional<List<EquipmentDto>> equipment) {
+        this.equipment = equipment;
     }
 }

@@ -1,6 +1,7 @@
 package lit.unichristus.edu.br.demo.controllers;
 
 import jakarta.validation.Valid;
+import lit.unichristus.edu.br.demo.dto.ReserveRoomEquipmentDto;
 import lit.unichristus.edu.br.demo.dto.RoomReserveDto;
 import lit.unichristus.edu.br.demo.exceptions.EquipmentComunicationException;
 import lit.unichristus.edu.br.demo.exceptions.EquipmentsNotFoundException;
@@ -119,7 +120,7 @@ public class RoomReserveController {
 
 
     @PostMapping()
-    public ResponseEntity<Object> reserveRoom(@RequestBody @Valid RoomReserveDto dto){
+    public ResponseEntity<Object> reserveRoom(@RequestBody RoomReserveDto dto, List<SupportEquipmentModel> equipments){
         try{
             if (roomReserveService.existReserveAlready(dto.getDate())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict: Room already booked on the given date!");
@@ -132,6 +133,19 @@ public class RoomReserveController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
+
+    @PutMapping(value = "/reserve")
+    public ResponseEntity<Object> reserveRoomAndEquipments(@RequestBody RoomReserveDto dto){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(roomReserveService.reserveRoom(dto.getId(), dto.getEquipment(),dto.getRoom()));
+        } catch (EquipmentsNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (EquipmentComunicationException e) {
+            return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+        }
+
+    }
+
 
     @PostMapping(value = "/semesterDate")
     public ResponseEntity<Object> reserveSemestralDate(@RequestBody @Valid RoomReserveDto dto){

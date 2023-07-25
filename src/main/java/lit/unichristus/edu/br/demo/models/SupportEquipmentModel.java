@@ -16,8 +16,6 @@ public class SupportEquipmentModel {
 
     private UUID id;
 
-    @NotBlank(message="Name may not be blank")
-    @Size(max = 30)
     private String description;
     private String brand;
     private boolean isDeleted;
@@ -25,9 +23,7 @@ public class SupportEquipmentModel {
     private String productModel;
     private String serialNumber;
     private String patrimony;
-    @NotNull
     private SituationEnum situation;
-    @NotNull
     private Integer amount;
     private Date lastChange;
     private UUID reserveRoomId;

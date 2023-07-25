@@ -10,8 +10,6 @@ import java.util.UUID;
 
 @FeignClient(value = "mssupportequipments", path = "/equipment")
 public interface SupportEquipmentsClient {
-    @PutMapping("/reserve")
-    ResponseEntity<Object> reserveEquipment(@RequestParam(value="id") UUID id, @RequestParam(value="reserveRoom") UUID reserveRoomId);
 
     @GetMapping(value = "/equipment-campus/released")
     ResponseEntity<Object> getReleasedEquipmentsByCampus(@RequestParam("campus") UUID campusId);
@@ -23,4 +21,10 @@ public interface SupportEquipmentsClient {
     @GetMapping(value="equipment-campus/allocated")
     @ResponseBody
     ResponseEntity<List<SupportEquipmentModel>> getAllocatedEquipment(@RequestParam("idReserve") UUID idReserve);
+
+    @GetMapping("/id")
+    SupportEquipmentModel findByIdAndReleased(@RequestParam("id") UUID idEquipment);
+
+    @PutMapping("/reserve")
+    ResponseEntity<Object> reserveEquipment(@RequestParam(value="id") UUID id,@RequestParam(value="reserveRoom") UUID reserveRoomId);
 }

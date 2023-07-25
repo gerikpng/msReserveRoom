@@ -4,6 +4,7 @@ import feign.FeignException;
 import feign.Response;
 import jakarta.transaction.Transactional;
 import lit.unichristus.edu.br.demo.clients.SupportEquipmentsClient;
+import lit.unichristus.edu.br.demo.dto.EquipmentDto;
 import lit.unichristus.edu.br.demo.exceptions.EquipmentComunicationException;
 import lit.unichristus.edu.br.demo.exceptions.EquipmentsNotFoundException;
 import lit.unichristus.edu.br.demo.exceptions.ReserveNotFoundException;
@@ -116,18 +117,40 @@ public class RoomReserveService {
     public Object getSituationReserve(UUID idReserve){
         ResponseEntity<List<SupportEquipmentModel>> responseEquipmet = equipmentClient.getAllocatedEquipment(idReserve);
         Optional<RoomReserveModel> responseReserve = repository.findById(idReserve);
-
         if(responseReserve.isEmpty()){
             return null;
         }
-
         return SituationReserve.builder()
                 .roomReserve(responseReserve.get())
                 .equipments(responseEquipmet.getBody())
                 .build();
+    }
 
+    public Object reserveRoom(UUID idReserve, Optional<List<EquipmentDto>> equipments, UUID room) throws EquipmentsNotFoundException, EquipmentComunicationException, EquipmentComunicationException{
+        try {
+            Optional<RoomReserveModel> responseReserve = repository.findById(idReserve);
+            if (!equipments.isEmpty()) {
+                for (EquipmentDto equipment : equipments.get()) {
+                    if(equipmentClient.findByIdAndReleased((UUID) equipment.getId()) != null) {
 
+                        equipmentClient.reserveEquipment((UUID) equipment.getId(), (UUID) idReserve);
+                    }else{
 
+                    }
+                }
+            }
+
+            RoomReserveModel reserveModel = responseReserve.get();
+            reserveModel.setRoom(room);
+            return repository.save(reserveModel);
+        }catch (FeignException.FeignClientException e){
+            int status = e.status();
+            if(HttpStatus.NOT_FOUND.value() == status){
+                throw new EquipmentsNotFoundException();
+            }
+            throw new EquipmentComunicationException(e.getMessage(),status);
+        }
 
     }
+
 }
